@@ -56,6 +56,9 @@ void testApp::setup() {
 	panel.addPanel("Control");
 	panel.addSlider("scale", "scale", 7, 1, 20);	
 	panel.addSlider("rotate y axis", "rotateY", 0, -360, 360, false);	
+  panel.addSlider("rotate x axis", "rotateX", -90, -360, 360, false);	
+  panel.addSlider("rotate z axis", "rotateZ", 0, -360, 360, false);	
+
 	panel.addToggle("auto rotate", "autoRotate", false);
 	panel.addToggle("draw debug", "drawDebug", false);
 	
@@ -92,11 +95,15 @@ void testApp::draw() {
 		ofPushMatrix();
 		
 			// center everything
-			ofTranslate(ofGetWidth()/2, ofGetWidth()/2, -500);
+			ofTranslate(ofGetWidth()/2, ofGetWidth()/2, -1000);
 			ofSetColor(255, 255, 255);
-			ofRotateY(180 + panel.getValueF("rotateY"));
+      ofRotateX(panel.getValueF("rotateX"));
+      
+			ofRotateY(panel.getValueF("rotateY"));
+    
+      ofRotateZ(panel.getValueF("rotateZ"));
 			if (panel.getValueB("autoRotate")){
-				ofRotateY(ofGetElapsedTimef()*5);
+				ofRotateZ(ofGetElapsedTimef()*5);
 			}
 			
 			float scale = panel.getValueF("scale");
