@@ -39,6 +39,8 @@ void testApp::setupBulletWorld(){
   fallRigidBody->setCollisionFlags( fallRigidBody->getCollisionFlags() & (~btCollisionObject::CF_STATIC_OBJECT) &  ( btCollisionObject::CF_KINEMATIC_OBJECT));
   dynamicsWorld->addRigidBody(fallRigidBody);
   
+  quadratic = gluNewQuadric();
+
 }
 
 //--------------------------------------------------------------
@@ -78,6 +80,7 @@ void testApp::setup() {
 
 //--------------------------------------------------------------
 void testApp::update() {
+  dynamicsWorld->stepSimulation(1/60.f,10);
 	input.update();
 }
 
@@ -92,6 +95,8 @@ void testApp::draw() {
 		input.drawDebug();
 		
 	} else {
+    
+    
 		ofPushMatrix();
 		
 			// center everything
@@ -150,10 +155,22 @@ void testApp::draw() {
 			}
 			glEnd();
 			
-			glDisable(GL_LIGHTING);
-			glDisable(GL_DEPTH_TEST);
-			
+
+    
+    ofPushMatrix();
+      ofSetColor(255, 0, 0);
+      ofNoFill();
+      cout << "y: " <<ballPosition.y << endl;
+      ofTranslate(ballPosition.x * scale - 100, ballPosition.y * scale, ballPosition.z * scale);
+      gluSphere(quadratic, 5.0, 20, 20);  
+
+    ofPopMatrix();
+    
+    glDisable(GL_LIGHTING);
+    glDisable(GL_DEPTH_TEST);
 		ofPopMatrix();
+    
+
 		
 	}
 	

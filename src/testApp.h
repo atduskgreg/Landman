@@ -33,6 +33,8 @@ class testApp : public ofBaseApp {
     ballMotionState* ballMS;
 	
     ofPoint ballPosition;
+    GLUquadricObj *quadratic;
+
   
 		DepthVisualizerInput input;
 };
