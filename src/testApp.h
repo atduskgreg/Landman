@@ -18,7 +18,8 @@ class testApp : public ofBaseApp {
 		void exit();
   
     void setupBulletWorld();
-	
+    void localCreateRigidBody(btHeightfieldTerrainShape *t);
+
 		void keyPressed  (int key);
 		void mouseMoved(int x, int y );
 		void mouseDragged(int x, int y, int button);
@@ -35,6 +36,7 @@ class testApp : public ofBaseApp {
     ofPoint ballPosition;
     GLUquadricObj *quadratic;
 
-  
+    bool heightFieldCreated;
+    btHeightfieldTerrainShape * heightfieldShape;
 		DepthVisualizerInput input;
 };

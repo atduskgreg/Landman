@@ -13,21 +13,10 @@ void testApp::setupBulletWorld(){
   dynamicsWorld->setGravity(btVector3(0,-10,0));
   
   
-  btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
   
   btCollisionShape* fallShape = new btSphereShape(1);
   
-  
-  btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
-  
-  //btHeightfieldTerrainShape * heightfieldShape = new btHeightfieldTerrainShape(640, 480, depthMap.getPixels(), 0.2, 0.0, 17.0, 1, PHY_FLOAT, false);
-  btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
-  
-  btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-  
-  
-  dynamicsWorld->addRigidBody(groundRigidBody);
-  
+    
   
   ballMS =
   new ballMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,50,0)), &ballPosition);
@@ -43,10 +32,25 @@ void testApp::setupBulletWorld(){
 
 }
 
+// HERE:
+void testApp::localCreateRigidBody(btHeightfieldTerrainShape *terrain){
+  //btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
+  //  
+  btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
+  //  
+  btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0,groundMotionState,terrain,btVector3(0,0,0));
+  //  
+  btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+  
+  dynamicsWorld->addRigidBody(groundRigidBody);
+  
+}
+
 //--------------------------------------------------------------
 void testApp::setup() {
 	ofSetFrameRate(60);
-	
+  heightFieldCreated = false;
+
 	input.setup(panel);  // < -- could pass in useKinnect here?
 	
 	panel.setup("Control Panel", 1024-310, 5, 300, 600);
@@ -82,6 +86,11 @@ void testApp::setup() {
 void testApp::update() {
   dynamicsWorld->stepSimulation(1/60.f,10);
 	input.update();
+  if(!heightFieldCreated){
+    heightfieldShape = new btHeightfieldTerrainShape(640, 480, input.depthImage.getPixels(), 0.2, 0.0, 17.0, 1, PHY_FLOAT, false);
+    localCreateRigidBody(heightfieldShape);
+    heightFieldCreated = true;
+  }
 }
 
 //--------------------------------------------------------------
@@ -161,7 +170,7 @@ void testApp::draw() {
       ofSetColor(255, 0, 0);
       ofNoFill();
       cout << "y: " <<ballPosition.y << endl;
-      ofTranslate(ballPosition.x * scale - 100, ballPosition.y * scale, ballPosition.z * scale);
+      ofTranslate(ballPosition.x * scale - 50, ballPosition.y * scale, ballPosition.z * scale);
       gluSphere(quadratic, 5.0, 20, 20);  
 
     ofPopMatrix();
@@ -185,6 +194,10 @@ void testApp::keyPressed (int key) {
 	if(key == 'f') {
 		ofToggleFullscreen();
 	}
+  
+  if(key == 'n'){
+    heightFieldCreated = false;
+  }
 }
 
 //--------------------------------------------------------------
