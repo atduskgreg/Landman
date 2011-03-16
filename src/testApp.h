@@ -1,40 +1,38 @@
-#ifndef _TEST_APP
-#define _TEST_APP
-
+#pragma once
 
 #include "ofMain.h"
+
+#include "ofxAutoControlPanel.h"
+#include "DepthVisualizerInput.h"
 #include "btBulletDynamicsCommon.h"
 #include "btHeightfieldTerrainShape.h"
-//#include "ofx3DUtils.h"
 #include "ballMotionState.cpp"
 
-#include "ofxOpenCv.h"
-
-
-class testApp : public ofBaseApp{
-
+class testApp : public ofBaseApp {
+	
 	public:
+
 		void setup();
 		void update();
 		void draw();
-    void exit();
-
+		void exit();
+  
+    void setupBulletWorld();
+	
 		void keyPressed  (int key);
-		void keyReleased(int key);
 		void mouseMoved(int x, int y );
 		void mouseDragged(int x, int y, int button);
 		void mousePressed(int x, int y, int button);
 		void mouseReleased(int x, int y, int button);
 		void windowResized(int w, int h);
 
-  btDiscreteDynamicsWorld* dynamicsWorld;
-  btRigidBody* fallRigidBody;
-  ballMotionState* ballMS;
+		ofxAutoControlPanel panel;
   
-  ofxCvGrayscaleImage depthMap;
+    btDiscreteDynamicsWorld* dynamicsWorld;
+    btRigidBody* fallRigidBody;
+    ballMotionState* ballMS;
+	
+    ofPoint ballPosition;
   
-  ofPoint ballPosition;
-  
+		DepthVisualizerInput input;
 };
-
-#endif
