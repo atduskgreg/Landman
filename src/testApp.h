@@ -51,7 +51,6 @@ class testApp : public ofBaseApp {
   btCollisionDispatcher* dispatcher;
   btSequentialImpulseConstraintSolver* solver;
   btCollisionShape* fallShape;
-  
   btCollisionShape* groundShape;
   btRigidBody* groundRigidBody;
   btDefaultMotionState* groundMotionState;

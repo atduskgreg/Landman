@@ -1,7 +1,7 @@
 #include "testApp.h"
 
 int numBalls = 64;
-
+int sphereSize = 5;
 
 void testApp::dropBalls(){
 
@@ -15,11 +15,12 @@ void testApp::dropBalls(){
   }
   
   for(int i = 0; i < numBalls; i++){
+
     ofPoint& cur = ballPositions[i];
     ballMotionState* ballMS =
     new ballMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(cur.x, cur.y, cur.z)), &cur);
     
-    btScalar mass = 1;
+    btScalar mass = 2;
     btVector3 fallInertia(0,0,0);
     fallShape->calculateLocalInertia(mass,fallInertia);
     btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,ballMS,fallShape,fallInertia);
@@ -45,7 +46,6 @@ void testApp::setupBulletWorld(){
   
   dynamicsWorld->setGravity(btVector3(0,-100,0));
   
-  fallShape = new btSphereShape(1);
   
   
   groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-50,0)));
@@ -54,7 +54,9 @@ void testApp::setupBulletWorld(){
   groundRigidBody = new btRigidBody(groundRigidBodyCI);
   
   //dynamicsWorld->addRigidBody(groundRigidBody);
-  
+
+  fallShape = new btSphereShape(sphereSize);
+
   dropBalls();
     
    
@@ -71,6 +73,9 @@ void testApp::localCreateRigidBody(btHeightfieldTerrainShape *terrain){
   btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0,groundMotionState,terrain,btVector3(0,0,0));
   //  
   btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+  
+  groundRigidBody->setCollisionFlags(groundRigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+
   
   dynamicsWorld->addRigidBody(groundRigidBody);
   
@@ -226,7 +231,7 @@ void testApp::draw() {
       ofPushMatrix();
         ofPoint ballPosition = ballPositions[i];
         ofTranslate(ballPosition.x * scale - 50, ballPosition.y * scale, ballPosition.z * scale);
-        gluSphere(quadratic, 5.0, 20, 20);  
+        gluSphere(quadratic, sphereSize, 20, 20);  
       ofPopMatrix();
     }
     
