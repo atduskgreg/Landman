@@ -3,30 +3,14 @@
 int numBalls = 64;
 
 
+void testApp::dropBalls(){
 
-
-void testApp::setupBulletWorld(){
-  broadphase = new btDbvtBroadphase();
-  collisionConfiguration = new btDefaultCollisionConfiguration();
-  dispatcher = new btCollisionDispatcher(collisionConfiguration);
-  solver = new btSequentialImpulseConstraintSolver;
-  dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
-  
-  dynamicsWorld->setGravity(btVector3(0,-10,0));
-  
-  fallShape = new btSphereShape(1);
-  
-  
-  groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
-  groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
-  btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
-  groundRigidBody = new btRigidBody(groundRigidBodyCI);
-  
-  dynamicsWorld->addRigidBody(groundRigidBody);
+  ballPositions.clear();
+  fallRigidBodies.clear();
   
   for(int i = 0; i < 8; i++){
     for(int j = 0; j < 8; j++){
-      ballPositions.push_back(ofPoint(i*10, 50, j*15));
+      ballPositions.push_back(ofPoint(i*10, 150, j*15));
     }
   }
   
@@ -41,13 +25,38 @@ void testApp::setupBulletWorld(){
     btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,ballMS,fallShape,fallInertia);
     
     btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
-    fallRigidBody->setCollisionFlags( fallRigidBody->getCollisionFlags() & (~btCollisionObject::CF_STATIC_OBJECT) &  ( btCollisionObject::CF_KINEMATIC_OBJECT));
+    fallRigidBody->setCollisionFlags( fallRigidBody->getCollisionFlags() & (~btCollisionObject::CF_STATIC_OBJECT));
     dynamicsWorld->addRigidBody(fallRigidBody);    
     
     fallRigidBodies.push_back(fallRigidBody);
     ballMSes.push_back(ballMS);
   }
   
+  
+}
+
+
+void testApp::setupBulletWorld(){
+  broadphase = new btDbvtBroadphase();
+  collisionConfiguration = new btDefaultCollisionConfiguration();
+  dispatcher = new btCollisionDispatcher(collisionConfiguration);
+  solver = new btSequentialImpulseConstraintSolver;
+  dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
+  
+  dynamicsWorld->setGravity(btVector3(0,-100,0));
+  
+  fallShape = new btSphereShape(1);
+  
+  
+  groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-50,0)));
+  groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
+  btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
+  groundRigidBody = new btRigidBody(groundRigidBodyCI);
+  
+  //dynamicsWorld->addRigidBody(groundRigidBody);
+  
+  dropBalls();
+    
    
   quadratic = gluNewQuadric();
 
@@ -81,7 +90,7 @@ void testApp::setup() {
 	panel.addSlider("far threshold", "farThreshold", 0, 0, 255, true);
 	
 	panel.addPanel("Control");
-	panel.addSlider("scale", "scale", 7, 1, 20);	
+	panel.addSlider("scale", "scale", 2, 1, 20);	
 	panel.addSlider("rotate y axis", "rotateY", 0, -360, 360, false);	
   panel.addSlider("rotate x axis", "rotateX", -90, -360, 360, false);	
   panel.addSlider("rotate z axis", "rotateZ", 0, -360, 360, false);	
@@ -108,9 +117,12 @@ void testApp::setup() {
   
   //btScalar heightScale, btScalar minHeight, btScalar maxHeight,int upAxis,
   
-  heightfieldShape = new btHeightfieldTerrainShape(640, 480, input.depthImage.getPixels(), 1, 0, 255, 1, PHY_UCHAR, false);
+  heightfieldShape = new btHeightfieldTerrainShape(640, 480, input.depthImage.getPixels(), 0.4, 0, 255, 1, PHY_UCHAR, false);
   localCreateRigidBody(heightfieldShape);
 }
+
+
+
 
 //--------------------------------------------------------------
 void testApp::update() {
@@ -167,33 +179,33 @@ void testApp::draw() {
 			glEnable(GL_LIGHT0);
 			glEnable(GL_NORMALIZE);
 			
-			glBegin(GL_QUADS);
-			ofxVec3f zero(0, 0, 0);
-			for(int y = 0; y < yMax; y += vertexStep) {
-				for(int x = 0; x < xMax; x += vertexStep) {
-				
-					ofxVec3f& nw = input.pointGrid[y][x];
-					ofxVec3f& ne = input.pointGrid[y][x + vertexStep];
-					ofxVec3f& se = input.pointGrid[y + vertexStep][x + vertexStep];
-					ofxVec3f& sw = input.pointGrid[y + vertexStep][x];
-					
-					if(nw != zero && ne != zero && sw != zero && se != zero) {
-					
-						ofxVec3f right = ne - nw;
-						ofxVec3f down = sw - nw;
-						ofxVec3f out = down.cross(right);
-												
-						glNormal3f(out.x, out.y, out.z);						
-						glVertex3f(nw.x, nw.y, nw.z);
-						glVertex3f(ne.x, ne.y, ne.z);
-						glVertex3f(se.x, se.y, se.z);
-						glVertex3f(sw.x, sw.y, sw.z);
-						
-					}
-				}
-			}
-			glEnd();
-			
+			//glBegin(GL_QUADS);
+//			ofxVec3f zero(0, 0, 0);
+//			for(int y = 0; y < yMax; y += vertexStep) {
+//				for(int x = 0; x < xMax; x += vertexStep) {
+//				
+//					ofxVec3f& nw = input.pointGrid[y][x];
+//					ofxVec3f& ne = input.pointGrid[y][x + vertexStep];
+//					ofxVec3f& se = input.pointGrid[y + vertexStep][x + vertexStep];
+//					ofxVec3f& sw = input.pointGrid[y + vertexStep][x];
+//					
+//					if(nw != zero && ne != zero && sw != zero && se != zero) {
+//					
+//						ofxVec3f right = ne - nw;
+//						ofxVec3f down = sw - nw;
+//						ofxVec3f out = down.cross(right);
+//												
+//						glNormal3f(out.x, out.y, out.z);						
+//						glVertex3f(nw.x, nw.y, nw.z);
+//						glVertex3f(ne.x, ne.y, ne.z);
+//						glVertex3f(se.x, se.y, se.z);
+//						glVertex3f(sw.x, sw.y, sw.z);
+//						
+//					}
+//				}
+//			}
+//			glEnd();
+//			
 
     
     ofPushMatrix();
@@ -217,6 +229,44 @@ void testApp::draw() {
         gluSphere(quadratic, 5.0, 20, 20);  
       ofPopMatrix();
     }
+    
+    
+    ofSetColor(255,255,255,50);
+    
+    
+    glDisable(GL_LIGHTING);
+    //glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_LIGHT0);
+    //glEnable(GL_NORMALIZE);
+    
+    
+    for (int i = 0; i < 640-10; i+= 10){
+      for (int j = 0; j < 480-10; j+= 10){
+     
+        btVector3 vertexA;
+        btVector3 vertexB;
+        btVector3 vertexC;
+        btVector3 vertexD;
+        
+        heightfieldShape->getVertex(i,j, vertexA);
+        heightfieldShape->getVertex(i+10,j, vertexB);
+        heightfieldShape->getVertex(i+10,j+10, vertexC);
+        heightfieldShape->getVertex(i,j+10, vertexD);
+        
+        
+        
+        //ofPushMatrix();
+        glBegin(GL_LINE_LOOP);
+        glVertex3f(vertexA.x() * scale - 50, vertexA.y() * scale, vertexA.z() * scale);
+        glVertex3f(vertexB.x() * scale - 50, vertexB.y() * scale, vertexB.z() * scale);
+        glVertex3f(vertexC.x() * scale - 50, vertexC.y() * scale, vertexC.z() * scale);
+        glVertex3f(vertexD.x() * scale - 50, vertexD.y() * scale, vertexD.z() * scale);
+        //gluSphere(quadratic, 5.0, 20, 20);  
+        glEnd();
+        
+
+      }
+    }
       
     ofPopMatrix();
     
@@ -239,6 +289,10 @@ void testApp::keyPressed (int key) {
 	if(key == 'f') {
 		ofToggleFullscreen();
 	}
+  
+  if(key == 'b'){
+    dropBalls();
+  }
   
   if(key == 'n'){
     heightFieldCreated = false;
