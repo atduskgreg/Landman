@@ -12,14 +12,21 @@ void testApp::setupBulletWorld(){
   solver = new btSequentialImpulseConstraintSolver;
   dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
   
-  dynamicsWorld->setGravity(btVector3(0,0,-10));
+  dynamicsWorld->setGravity(btVector3(0,-10,0));
   
   fallShape = new btSphereShape(1);
   
   
+  groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
+  groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
+  btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
+  groundRigidBody = new btRigidBody(groundRigidBodyCI);
+  
+  dynamicsWorld->addRigidBody(groundRigidBody);
+  
   for(int i = 0; i < 8; i++){
     for(int j = 0; j < 8; j++){
-      ballPositions.push_back(ofPoint(i*10, 50, j*10));
+      ballPositions.push_back(ofPoint(i*10, 50, j*15));
     }
   }
   
@@ -190,6 +197,8 @@ void testApp::draw() {
 
     
     ofPushMatrix();
+      ofTranslate(0, 100, 0);
+
       ofRotateX(panel.getValueF("bulletRotateX"));
       
       ofRotateY(panel.getValueF("bulletRotateY"));
