@@ -30,13 +30,23 @@ class testApp : public ofBaseApp {
 		ofxAutoControlPanel panel;
   
     btDiscreteDynamicsWorld* dynamicsWorld;
-    btRigidBody* fallRigidBody;
-    ballMotionState* ballMS;
-	
-    ofPoint ballPosition;
+    
+    vector<btRigidBody*> fallRigidBodies;
+  
+    vector<ballMotionState*> ballMSes;
+    vector<ofPoint> ballPositions;
+      
     GLUquadricObj *quadratic;
+
 
     bool heightFieldCreated;
     btHeightfieldTerrainShape * heightfieldShape;
 		DepthVisualizerInput input;
+  
+  
+  btBroadphaseInterface* broadphase;
+  btDefaultCollisionConfiguration* collisionConfiguration;
+  btCollisionDispatcher* dispatcher;
+  btSequentialImpulseConstraintSolver* solver;
+  btCollisionShape* fallShape;
 };

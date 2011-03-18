@@ -1,0 +1,45 @@
+<nearThreshold>
+    <val_0>255.000000</val_0>
+</nearThreshold>
+<farThreshold>
+    <val_0>0.000000</val_0>
+</farThreshold>
+<scale>
+    <val_0>1.105556</val_0>
+</scale>
+<rotateY>
+    <val_0>0.000000</val_0>
+</rotateY>
+<rotateX>
+    <val_0>-167.999985</val_0>
+</rotateX>
+<rotateZ>
+    <val_0>0.000000</val_0>
+</rotateZ>
+<bulletRotateY>
+    <val_0>0.000000</val_0>
+</bulletRotateY>
+<bulletRotateX>
+    <val_0>-72.000000</val_0>
+</bulletRotateX>
+<bulletRotateZ>
+    <val_0>0.000000</val_0>
+</bulletRotateZ>
+<autoRotate>
+    <val_0>0.000000</val_0>
+</autoRotate>
+<drawDebug>
+    <val_0>0.000000</val_0>
+</drawDebug>
+<drawSceneBox>
+    <val_0>0.000000</val_0>
+</drawSceneBox>
+<playSpeed>
+    <val_0>0.500000</val_0>
+</playSpeed>
+<playbackPause>
+    <val_0>0.000000</val_0>
+</playbackPause>
+<vertexStep>
+    <val_0>2.000000</val_0>
+</vertexStep>

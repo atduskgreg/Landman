@@ -1,33 +1,47 @@
 #include "testApp.h"
 
+int numBalls = 64;
+
+
+
+
 void testApp::setupBulletWorld(){
-  btBroadphaseInterface* broadphase = new btDbvtBroadphase();
-  
-  btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-  btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-  
-  btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
-  
+  broadphase = new btDbvtBroadphase();
+  collisionConfiguration = new btDefaultCollisionConfiguration();
+  dispatcher = new btCollisionDispatcher(collisionConfiguration);
+  solver = new btSequentialImpulseConstraintSolver;
   dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
   
-  dynamicsWorld->setGravity(btVector3(0,-10,0));
+  dynamicsWorld->setGravity(btVector3(0,0,-10));
+  
+  fallShape = new btSphereShape(1);
   
   
+  for(int i = 0; i < 8; i++){
+    for(int j = 0; j < 8; j++){
+      ballPositions.push_back(ofPoint(i*10, 50, j*10));
+    }
+  }
   
-  btCollisionShape* fallShape = new btSphereShape(1);
-  
+  for(int i = 0; i < numBalls; i++){
+    ofPoint& cur = ballPositions[i];
+    ballMotionState* ballMS =
+    new ballMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(cur.x, cur.y, cur.z)), &cur);
     
+    btScalar mass = 1;
+    btVector3 fallInertia(0,0,0);
+    fallShape->calculateLocalInertia(mass,fallInertia);
+    btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,ballMS,fallShape,fallInertia);
+    
+    btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
+    fallRigidBody->setCollisionFlags( fallRigidBody->getCollisionFlags() & (~btCollisionObject::CF_STATIC_OBJECT) &  ( btCollisionObject::CF_KINEMATIC_OBJECT));
+    dynamicsWorld->addRigidBody(fallRigidBody);    
+    
+    fallRigidBodies.push_back(fallRigidBody);
+    ballMSes.push_back(ballMS);
+  }
   
-  ballMS =
-  new ballMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,50,0)), &ballPosition);
-  btScalar mass = 1;
-  btVector3 fallInertia(0,0,0);
-  fallShape->calculateLocalInertia(mass,fallInertia);
-  btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,ballMS,fallShape,fallInertia);
-  fallRigidBody = new btRigidBody(fallRigidBodyCI);
-  fallRigidBody->setCollisionFlags( fallRigidBody->getCollisionFlags() & (~btCollisionObject::CF_STATIC_OBJECT) &  ( btCollisionObject::CF_KINEMATIC_OBJECT));
-  dynamicsWorld->addRigidBody(fallRigidBody);
-  
+   
   quadratic = gluNewQuadric();
 
 }
@@ -65,7 +79,11 @@ void testApp::setup() {
   panel.addSlider("rotate x axis", "rotateX", -90, -360, 360, false);	
   panel.addSlider("rotate z axis", "rotateZ", 0, -360, 360, false);	
 
-	panel.addToggle("auto rotate", "autoRotate", false);
+	panel.addSlider("rotate y axis", "bulletRotateY", 0, -360, 360, false);	
+  panel.addSlider("rotate x axis", "bulletRotateX", -90, -360, 360, false);	
+  panel.addSlider("rotate z axis", "bulletRotateZ", 0, -360, 360, false);	
+	
+  panel.addToggle("auto rotate", "autoRotate", false);
 	panel.addToggle("draw debug", "drawDebug", false);
 	
 	panel.addToggle("draw scene bounding frustrum", "drawSceneBox", false);
@@ -80,17 +98,22 @@ void testApp::setup() {
   
   
 	setupBulletWorld();
+  
+  //btScalar heightScale, btScalar minHeight, btScalar maxHeight,int upAxis,
+  
+  heightfieldShape = new btHeightfieldTerrainShape(640, 480, input.depthImage.getPixels(), 1, 0, 255, 1, PHY_UCHAR, false);
+  localCreateRigidBody(heightfieldShape);
 }
 
 //--------------------------------------------------------------
 void testApp::update() {
   dynamicsWorld->stepSimulation(1/60.f,10);
 	input.update();
-  if(!heightFieldCreated){
-    heightfieldShape = new btHeightfieldTerrainShape(640, 480, input.depthImage.getPixels(), 0.2, 0.0, 17.0, 1, PHY_FLOAT, false);
-    localCreateRigidBody(heightfieldShape);
-    heightFieldCreated = true;
-  }
+  //if(!heightFieldCreated){
+    //heightfieldShape = new btHeightfieldTerrainShape(640, 480, input.depthImage.getPixels(), 0.2, 0.0, 17.0, 1, PHY_FLOAT, false);
+    //localCreateRigidBody(heightfieldShape);
+    //heightFieldCreated = true;
+  //}
 }
 
 //--------------------------------------------------------------
@@ -111,12 +134,12 @@ void testApp::draw() {
 			// center everything
 			ofTranslate(ofGetWidth()/2, ofGetWidth()/2, -1000);
 			ofSetColor(255, 255, 255);
-      ofRotateX(panel.getValueF("rotateX"));
-      
-			ofRotateY(panel.getValueF("rotateY"));
     
+      ofRotateX(panel.getValueF("rotateX"));      
+			ofRotateY(panel.getValueF("rotateY"));
       ofRotateZ(panel.getValueF("rotateZ"));
-			if (panel.getValueB("autoRotate")){
+			
+      if (panel.getValueB("autoRotate")){
 				ofRotateZ(ofGetElapsedTimef()*5);
 			}
 			
@@ -167,12 +190,25 @@ void testApp::draw() {
 
     
     ofPushMatrix();
+      ofRotateX(panel.getValueF("bulletRotateX"));
+      
+      ofRotateY(panel.getValueF("bulletRotateY"));
+      
+      ofRotateZ(panel.getValueF("bulletRotateZ"));
+      
       ofSetColor(255, 0, 0);
       ofNoFill();
-      cout << "y: " <<ballPosition.y << endl;
-      ofTranslate(ballPosition.x * scale - 50, ballPosition.y * scale, ballPosition.z * scale);
-      gluSphere(quadratic, 5.0, 20, 20);  
-
+      
+      //cout << "y: " <<ballPosition.y << endl;
+      
+    for(int i = 0; i < numBalls; i++){
+      ofPushMatrix();
+        ofPoint ballPosition = ballPositions[i];
+        ofTranslate(ballPosition.x * scale - 50, ballPosition.y * scale, ballPosition.z * scale);
+        gluSphere(quadratic, 5.0, 20, 20);  
+      ofPopMatrix();
+    }
+      
     ofPopMatrix();
     
     glDisable(GL_LIGHTING);
