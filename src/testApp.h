@@ -8,6 +8,9 @@
 #include "btHeightfieldTerrainShape.h"
 #include "ballMotionState.cpp"
 
+#include "ofxQTVideoSaver.h"
+
+
 class testApp : public ofBaseApp {
 	
 	public:
@@ -26,6 +29,9 @@ class testApp : public ofBaseApp {
 		void mousePressed(int x, int y, int button);
 		void mouseReleased(int x, int y, int button);
 		void windowResized(int w, int h);
+
+  
+  ofColor colorFromVertex(float v);
 
   void dropBalls();
   
@@ -54,4 +60,13 @@ class testApp : public ofBaseApp {
   btCollisionShape* groundShape;
   btRigidBody* groundRigidBody;
   btDefaultMotionState* groundMotionState;
+  
+  
+  // VIDEO
+//  ofVideoGrabber vid;
+
+  
+  ofxQtVideoSaver saver;
+  bool bRecording;
+  ofImage fullAppBuffer;
 };

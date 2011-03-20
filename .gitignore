@@ -1,6 +1,8 @@
 *.app
 build/
 
+bin/data/*.mov
+
 # xcode noise
 *.mode1v3
 *.pbxuser

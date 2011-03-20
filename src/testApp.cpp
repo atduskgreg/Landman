@@ -85,7 +85,11 @@ void testApp::localCreateRigidBody(btHeightfieldTerrainShape *terrain){
 void testApp::setup() {
 	ofSetFrameRate(60);
   heightFieldCreated = false;
+  
+  fullAppBuffer.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR);
 
+
+  
 	input.setup(panel);  // < -- could pass in useKinnect here?
 	
 	panel.setup("Control Panel", 1024-310, 5, 300, 600);
@@ -133,6 +137,10 @@ void testApp::setup() {
 void testApp::update() {
   dynamicsWorld->stepSimulation(1/60.f,10);
 	input.update();
+  if (bRecording == true){
+		saver.addFrame(fullAppBuffer.getPixels(), 1.0f / ofGetFrameRate()); 
+  }
+  
   //if(!heightFieldCreated){
     //heightfieldShape = new btHeightfieldTerrainShape(640, 480, input.depthImage.getPixels(), 0.2, 0.0, 17.0, 1, PHY_FLOAT, false);
     //localCreateRigidBody(heightfieldShape);
@@ -258,14 +266,33 @@ void testApp::draw() {
         heightfieldShape->getVertex(i+10,j+10, vertexC);
         heightfieldShape->getVertex(i,j+10, vertexD);
         
-        
+        bool p = true;
         
         //ofPushMatrix();
-        glBegin(GL_LINE_LOOP);
-        glVertex3f(vertexA.x() * scale - 50, vertexA.y() * scale, vertexA.z() * scale);
-        glVertex3f(vertexB.x() * scale - 50, vertexB.y() * scale, vertexB.z() * scale);
-        glVertex3f(vertexC.x() * scale - 50, vertexC.y() * scale, vertexC.z() * scale);
-        glVertex3f(vertexD.x() * scale - 50, vertexD.y() * scale, vertexD.z() * scale);
+        glBegin(GL_POLYGON);
+                    
+          ofColor c = colorFromVertex(vertexA.y());
+          glColor3f(c.r, c.g, c.b);
+          /*if(p){
+            cout << "Vy" << vertexA.y() << endl;
+            p = false;
+         }*/
+          glVertex3f(vertexA.x() * scale - 50, vertexA.y() * scale, vertexA.z() * scale);
+        
+          c = colorFromVertex(vertexB.y());
+          glColor3f(c.r, c.g, c.b);
+        
+          glVertex3f(vertexB.x() * scale - 50, vertexB.y() * scale, vertexB.z() * scale);
+        
+          c = colorFromVertex(vertexC.y());
+          glColor3f(c.r, c.g, c.b);
+          
+          glVertex3f(vertexC.x() * scale - 50, vertexC.y() * scale, vertexC.z() * scale);
+          
+          c = colorFromVertex(vertexD.y());
+          glColor3f(c.r, c.g, c.b);
+        
+          glVertex3f(vertexD.x() * scale - 50, vertexD.y() * scale, vertexD.z() * scale);
         //gluSphere(quadratic, 5.0, 20, 20);  
         glEnd();
         
@@ -283,6 +310,33 @@ void testApp::draw() {
 		
 	}
 	
+  if(bRecording == true){
+    fullAppBuffer.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+  }
+}
+
+ofColor testApp::colorFromVertex(float y){
+
+ 
+  ofColor result;
+  
+  if(y < -115){
+    result.r = ofMap(y, -125, -115, 0, 0.55, true);
+    result.g = ofMap(y, -125, -115, 0, 0.45, true);
+    result.b = ofMap(y, -125, -115, 1, 0.25, true);
+  }
+  
+  if(y >= -115 && y < -80){
+    result.r = ofMap(y, -115, -80, 0.55, 0, true);
+    result.g = ofMap(y, -115, -80, 0.45, 0.8, true);
+    result.b = ofMap(y, -115, -80, 0.25, 0.1, true);
+  }
+  
+  /*result.r = r;//0.55;//150;
+  result.g = g;//0.45;//100;
+  result.b = b;//.25;//75;
+   */
+  return result;
 }
 
 //--------------------------------------------------------------
@@ -302,6 +356,15 @@ void testApp::keyPressed (int key) {
   if(key == 'n'){
     heightFieldCreated = false;
   }
+  
+  if (key == 'a'){
+		saver.setup(ofGetWidth(),ofGetHeight(),"ball_drop.mov");
+	} else if (key == 's'){
+		saver.finishMovie();
+		bRecording = false;
+	} else if (key == 'r'){
+		bRecording = !bRecording;
+	}
 }
 
 //--------------------------------------------------------------

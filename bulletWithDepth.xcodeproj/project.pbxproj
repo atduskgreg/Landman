@@ -25,6 +25,7 @@
 		27C5F7E3130397B000475346 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27C5F7DC130397B000475346 /* tinyxmlerror.cpp */; };
 		27C5F7E4130397B000475346 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27C5F7DD130397B000475346 /* tinyxmlparser.cpp */; };
 		27C5F7E5130397B000475346 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27C5F7DF130397B000475346 /* ofxXmlSettings.cpp */; };
+		3745FE5913341FD400B96A60 /* ofxQTVideoSaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3745FE5713341FD400B96A60 /* ofxQTVideoSaver.cpp */; };
 		37A770AA1331685700CD897A /* btAxisSweep3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37A76DD21331685400CD897A /* btAxisSweep3.cpp */; };
 		37A770AB1331685700CD897A /* btBroadphaseProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37A76DD51331685400CD897A /* btBroadphaseProxy.cpp */; };
 		37A770AC1331685700CD897A /* btCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37A76DD71331685400CD897A /* btCollisionAlgorithm.cpp */; };
@@ -444,6 +445,8 @@
 		27C5F7DD130397B000475346 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlparser.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlparser.cpp; sourceTree = SOURCE_ROOT; };
 		27C5F7DF130397B000475346 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxXmlSettings.cpp; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.cpp; sourceTree = SOURCE_ROOT; };
 		27C5F7E0130397B000475346 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxXmlSettings.h; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.h; sourceTree = SOURCE_ROOT; };
+		3745FE5713341FD400B96A60 /* ofxQTVideoSaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxQTVideoSaver.cpp; sourceTree = "<group>"; };
+		3745FE5813341FD400B96A60 /* ofxQTVideoSaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxQTVideoSaver.h; sourceTree = "<group>"; };
 		37A76DD21331685400CD897A /* btAxisSweep3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btAxisSweep3.cpp; sourceTree = "<group>"; };
 		37A76DD31331685400CD897A /* btAxisSweep3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btAxisSweep3.h; sourceTree = "<group>"; };
 		37A76DD41331685400CD897A /* btBroadphaseInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBroadphaseInterface.h; sourceTree = "<group>"; };
@@ -1478,6 +1481,16 @@
 			path = ../../../addons/ofxXmlSettings/src;
 			sourceTree = SOURCE_ROOT;
 		};
+		3745FE5613341FD400B96A60 /* ofxQTVideoSaver */ = {
+			isa = PBXGroup;
+			children = (
+				3745FE5713341FD400B96A60 /* ofxQTVideoSaver.cpp */,
+				3745FE5813341FD400B96A60 /* ofxQTVideoSaver.h */,
+			);
+			name = ofxQTVideoSaver;
+			path = ../emptyExample/ofxQTVideoSaver;
+			sourceTree = SOURCE_ROOT;
+		};
 		37A76DD01331685400CD897A /* BulletCollision */ = {
 			isa = PBXGroup;
 			children = (
@@ -2430,6 +2443,7 @@
 		E44665C70F5B3E03005D0BF0 /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				3745FE5613341FD400B96A60 /* ofxQTVideoSaver */,
 				27C5F7D0130397B000475346 /* ofxDirList */,
 				27C5F7D7130397B000475346 /* ofxXmlSettings */,
 				27C5F77A1303976100475346 /* ofxKinect */,
@@ -3095,6 +3109,7 @@
 				37A772271331685800CD897A /* Makefile in Sources */,
 				37A772291331685800CD897A /* Makefile in Sources */,
 				37A772361331692000CD897A /* ballMotionState.cpp in Sources */,
+				3745FE5913341FD400B96A60 /* ofxQTVideoSaver.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
