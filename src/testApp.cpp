@@ -271,8 +271,8 @@ void testApp::draw() {
         //ofPushMatrix();
         glBegin(GL_POLYGON);
         
-          //btVector3 normal = vertexA.cross(vertexC);
-          //glNormal3f(normal.x, normal.y, normal.z);
+          btVector3 normal = vertexA.cross(vertexC);
+          glNormal3f(normal.x(), normal.y(), normal.z());
         
           float ys[4] = {vertexA.y(), vertexB.y(), vertexC.y(),vertexD.y()};
           sort(ys, ys+4);
