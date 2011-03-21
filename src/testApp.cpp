@@ -270,30 +270,52 @@ void testApp::draw() {
         
         //ofPushMatrix();
         glBegin(GL_POLYGON);
-                    
-          ofColor c = colorFromVertex(vertexA.y());
-          glColor3f(c.r, c.g, c.b);
-          /*if(p){
-            cout << "Vy" << vertexA.y() << endl;
-            p = false;
-         }*/
-          glVertex3f(vertexA.x() * scale - 50, vertexA.y() * scale, vertexA.z() * scale);
         
-          c = colorFromVertex(vertexB.y());
-          glColor3f(c.r, c.g, c.b);
+          //btVector3 normal = vertexA.cross(vertexC);
+          //glNormal3f(normal.x, normal.y, normal.z);
         
-          glVertex3f(vertexB.x() * scale - 50, vertexB.y() * scale, vertexB.z() * scale);
-        
-          c = colorFromVertex(vertexC.y());
-          glColor3f(c.r, c.g, c.b);
+          float ys[4] = {vertexA.y(), vertexB.y(), vertexC.y(),vertexD.y()};
+          sort(ys, ys+4);
           
-          glVertex3f(vertexC.x() * scale - 50, vertexC.y() * scale, vertexC.z() * scale);
-          
-          c = colorFromVertex(vertexD.y());
-          glColor3f(c.r, c.g, c.b);
+          /*bool frun = true;
+          if(frun){
+            cout << "0: " << ys[3] << " a: " << ys[0] << endl;
+            frun = false;
+          }*/
         
-          glVertex3f(vertexD.x() * scale - 50, vertexD.y() * scale, vertexD.z() * scale);
-        //gluSphere(quadratic, 5.0, 20, 20);  
+          if(ys[3] - ys[0] > 50 ){ 
+
+            glColor3f(0.55, 0.45, 0.25);
+              glVertex3f(vertexA.x() * scale - 50, vertexA.y() * scale, vertexA.z() * scale);
+              glVertex3f(vertexB.x() * scale - 50, vertexB.y() * scale, vertexB.z() * scale);
+            
+            glColor3f(0, 0.45, 0);
+              glVertex3f(vertexC.x() * scale - 50, vertexC.y() * scale, vertexC.z() * scale);
+              glVertex3f(vertexD.x() * scale - 50, vertexD.y() * scale, vertexD.z() * scale);
+          } else{
+          
+                  
+            ofColor c = colorFromVertex(vertexA.y());
+            glColor3f(c.r, c.g, c.b);
+        
+            glVertex3f(vertexA.x() * scale - 50, vertexA.y() * scale, vertexA.z() * scale);
+        
+            c = colorFromVertex(vertexB.y());
+            glColor3f(c.r, c.g, c.b);
+        
+            glVertex3f(vertexB.x() * scale - 50, vertexB.y() * scale, vertexB.z() * scale);
+        
+            c = colorFromVertex(vertexC.y());
+            glColor3f(c.r, c.g, c.b);
+          
+            glVertex3f(vertexC.x() * scale - 50, vertexC.y() * scale, vertexC.z() * scale);
+          
+            c = colorFromVertex(vertexD.y());
+            glColor3f(c.r, c.g, c.b);
+        
+            glVertex3f(vertexD.x() * scale - 50, vertexD.y() * scale, vertexD.z() * scale);
+          }
+
         glEnd();
         
 
@@ -317,7 +339,6 @@ void testApp::draw() {
 
 ofColor testApp::colorFromVertex(float y){
 
- 
   ofColor result;
   
   if(y < -115){
