@@ -71,23 +71,25 @@ void testApp::setupBulletWorld(){
   
   dynamicsWorld->addRigidBody(eastWallRigidBody);
   
-  /*btCollisionShape* northWall = new btStaticPlaneShape(btVector3(0,0,1),1);
-  btDefaultMotionState* northWallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(120,0,0)));
+  btCollisionShape* northWall = new btStaticPlaneShape(btVector3(0,0,-1),1);
+  btDefaultMotionState* northWallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,0,220)));
   btRigidBody::btRigidBodyConstructionInfo northWallRigidBodyCI(0,northWallMotionState,northWall,btVector3(0,0,0));
   btRigidBody* northWallRigidBody = new btRigidBody(northWallRigidBodyCI);
   
   
   northWallRigidBody->setRestitution(0.8f);
   
-  dynamicsWorld->addRigidBody(northWallRigidBody);*/
-
- /* btCollisionShape* northWall = new btStaticPlaneShape(btVector3(1,0,0),1);
-  btDefaultMotionState* northWallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(-180,0,0)));
-  btRigidBody::btRigidBodyConstructionInfo northWallRigidBodyCI(0,northWallMotionState,northWall,btVector3(0,0,0));
-  btRigidBody* northWallRigidBody = new btRigidBody(northWallRigidBodyCI);
-  
   dynamicsWorld->addRigidBody(northWallRigidBody);
-  */
+
+  btCollisionShape* southWall = new btStaticPlaneShape(btVector3(0,0,1),1);
+  btDefaultMotionState* southWallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,0,-220)));
+  btRigidBody::btRigidBodyConstructionInfo southWallRigidBodyCI(0,southWallMotionState,southWall,btVector3(0,0,0));
+  btRigidBody* southWallRigidBody = new btRigidBody(southWallRigidBodyCI);
+  
+  southWallRigidBody->setRestitution(0.8f);
+
+  dynamicsWorld->addRigidBody(southWallRigidBody);
+  
   
   
   groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-50,0)));
@@ -147,7 +149,7 @@ void testApp::setup() {
 	panel.addSlider("scale", "scale", 2, 1, 20);	
 	panel.addSlider("rotate y axis", "rotateY", 0, -360, 360, false);	
   panel.addSlider("rotate x axis", "rotateX", -90, -360, 360, false);	
-  panel.addSlider("rotate z axis", "rotateZ", 0, -360, 360, false);	
+  panel.addSlider("rotate z axis", "rotateZ", -180, -360, 360, false);	
 
 	panel.addSlider("rotate y axis", "bulletRotateY", 0, -360, 360, false);	
   panel.addSlider("rotate x axis", "bulletRotateX", -90, -360, 360, false);	
