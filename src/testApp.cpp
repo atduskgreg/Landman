@@ -52,6 +52,42 @@ void testApp::setupBulletWorld(){
   
   dynamicsWorld->setGravity(btVector3(0,-100,0));
   
+  btCollisionShape* westWall = new btStaticPlaneShape(btVector3(1,0,0),1);
+  btDefaultMotionState* westWallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(-280,0,0)));
+  btRigidBody::btRigidBodyConstructionInfo westWallRigidBodyCI(0,westWallMotionState,westWall,btVector3(0,0,0));
+  btRigidBody* westWallRigidBody = new btRigidBody(westWallRigidBodyCI);
+  
+  westWallRigidBody->setRestitution(0.8f);
+  
+  dynamicsWorld->addRigidBody(westWallRigidBody);
+  
+  btCollisionShape* eastWall = new btStaticPlaneShape(btVector3(-1,0,0),1);
+  btDefaultMotionState* eastWallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(280,0,0)));
+  btRigidBody::btRigidBodyConstructionInfo eastWallRigidBodyCI(0,eastWallMotionState,eastWall,btVector3(0,0,0));
+  btRigidBody* eastWallRigidBody = new btRigidBody(eastWallRigidBodyCI);
+  
+  
+  eastWallRigidBody->setRestitution(0.8f);
+  
+  dynamicsWorld->addRigidBody(eastWallRigidBody);
+  
+  /*btCollisionShape* northWall = new btStaticPlaneShape(btVector3(0,0,1),1);
+  btDefaultMotionState* northWallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(120,0,0)));
+  btRigidBody::btRigidBodyConstructionInfo northWallRigidBodyCI(0,northWallMotionState,northWall,btVector3(0,0,0));
+  btRigidBody* northWallRigidBody = new btRigidBody(northWallRigidBodyCI);
+  
+  
+  northWallRigidBody->setRestitution(0.8f);
+  
+  dynamicsWorld->addRigidBody(northWallRigidBody);*/
+
+ /* btCollisionShape* northWall = new btStaticPlaneShape(btVector3(1,0,0),1);
+  btDefaultMotionState* northWallMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(-180,0,0)));
+  btRigidBody::btRigidBodyConstructionInfo northWallRigidBodyCI(0,northWallMotionState,northWall,btVector3(0,0,0));
+  btRigidBody* northWallRigidBody = new btRigidBody(northWallRigidBodyCI);
+  
+  dynamicsWorld->addRigidBody(northWallRigidBody);
+  */
   
   
   groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-50,0)));
@@ -260,7 +296,7 @@ void testApp::draw() {
         gluQuadricOrientation(quadratic,GLU_INSIDE);   
         //ofBox(-640,-480, -100, 740);
         //glCube(GL_POLYGON, 640);
-      gluSphere(quadratic, 1000, 20, 20); 
+      gluSphere(quadratic, 2000, 20, 20); 
 
 
         skyImage.getTextureReference().unbind();
@@ -278,6 +314,8 @@ void testApp::draw() {
           glEnable(GL_LIGHT0);    
       
           ofPoint ballPosition = ballPositions[i];
+          
+          cout << "x: " << ballPosition.x * scale - 50 << endl;
           ofTranslate(ballPosition.x * scale - 50, ballPosition.y * scale, ballPosition.z * scale);
           ofScale(0.2, 0.2, 0.2);
           ofSetColor(255, 255, 255);

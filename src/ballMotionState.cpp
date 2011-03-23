@@ -28,7 +28,7 @@ public:
   void setKinematicPos(ofPoint &currentPos) {
     //cout << "skp: " << currentPos.y << endl;
     btTransform currentTransform = btTransform(btQuaternion(0,0,0,1),btVector3(currentPos.x,currentPos.y,currentPos.z));
-    cout << "ct: " << currentTransform.getOrigin().x() << endl;
+    //cout << "ct: " << currentTransform.getOrigin().x() << endl;
     mVisibleobj->x = currentPos.x;
     mVisibleobj->y = currentPos.y;
     mVisibleobj->z = currentPos.z;
@@ -37,7 +37,7 @@ public:
   }
   
   virtual void getWorldTransform(btTransform &worldTrans) const {
-    //cout << "gwt: " << worldTrans.getOrigin().y() << endl;
+    //cout << "gwtX: " << worldTrans.getOrigin().x() << endl;
     worldTrans = mPos1;
   }
   
