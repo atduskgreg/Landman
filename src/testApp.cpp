@@ -1,7 +1,7 @@
 #include "testApp.h"
 
-int numBalls = 64;
-int sphereSize = 5;
+int numBalls = 1;
+int sphereSize = 20;
 
 void testApp::dropBalls(){
 
@@ -27,6 +27,8 @@ void testApp::dropBalls(){
     
     btRigidBody* fallRigidBody = new btRigidBody(fallRigidBodyCI);
     fallRigidBody->setCollisionFlags( fallRigidBody->getCollisionFlags() & (~btCollisionObject::CF_STATIC_OBJECT));
+    fallRigidBody->setRestitution(0.8f);
+
     dynamicsWorld->addRigidBody(fallRigidBody);    
     
     fallRigidBodies.push_back(fallRigidBody);
@@ -39,6 +41,10 @@ void testApp::dropBalls(){
 
 void testApp::setupBulletWorld(){
   broadphase = new btDbvtBroadphase();
+
+  /*btOverlappingPairCallback* ghostPairCallback = new btGhostPairCallback();
+  broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(ghostPairCallback);
+  */
   collisionConfiguration = new btDefaultCollisionConfiguration();
   dispatcher = new btCollisionDispatcher(collisionConfiguration);
   solver = new btSequentialImpulseConstraintSolver;
@@ -50,6 +56,8 @@ void testApp::setupBulletWorld(){
   
   groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-50,0)));
   groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
+    
+  
   btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
   groundRigidBody = new btRigidBody(groundRigidBodyCI);
   
@@ -76,7 +84,7 @@ void testApp::localCreateRigidBody(btHeightfieldTerrainShape *terrain){
   
   groundRigidBody->setCollisionFlags(groundRigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 
-  
+  groundRigidBody->setRestitution(1.0f);
   dynamicsWorld->addRigidBody(groundRigidBody);
   
 }
@@ -88,7 +96,8 @@ void testApp::setup() {
   
   fullAppBuffer.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR);
 
-
+  model.load("self_portrait_final.obj");
+  //model.load("edited_rough_model.obj");
   
 	input.setup(panel);  // < -- could pass in useKinnect here?
 	
@@ -127,6 +136,7 @@ void testApp::setup() {
   //btScalar heightScale, btScalar minHeight, btScalar maxHeight,int upAxis,
   
   heightfieldShape = new btHeightfieldTerrainShape(640, 480, input.depthImage.getPixels(), 0.4, 0, 255, 1, PHY_UCHAR, false);
+
   localCreateRigidBody(heightfieldShape);
 }
 
@@ -237,9 +247,21 @@ void testApp::draw() {
       
     for(int i = 0; i < numBalls; i++){
       ofPushMatrix();
-        ofPoint ballPosition = ballPositions[i];
-        ofTranslate(ballPosition.x * scale - 50, ballPosition.y * scale, ballPosition.z * scale);
-        gluSphere(quadratic, sphereSize, 20, 20);  
+        glPushMatrix();
+          glEnable(GL_LIGHTING);
+          glEnable(GL_LIGHT0);    
+      
+          ofPoint ballPosition = ballPositions[i];
+          ofTranslate(ballPosition.x * scale - 50, ballPosition.y * scale, ballPosition.z * scale);
+          ofScale(0.2, 0.2, 0.2);
+          ofSetColor(255, 255, 255);
+          ofFill();
+          model.draw();
+        
+          //gluSphere(quadratic, sphereSize, 20, 20);  
+          glDisable(GL_LIGHTING);
+          glDisable(GL_LIGHT0);    
+        glPopMatrix();
       ofPopMatrix();
     }
     

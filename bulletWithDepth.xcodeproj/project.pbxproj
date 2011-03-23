@@ -288,6 +288,7 @@
 		37A772281331685800CD897A /* LinearMath.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A770A81331685700CD897A /* LinearMath.framework */; };
 		37A772291331685800CD897A /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 37A770A91331685700CD897A /* Makefile */; };
 		37A772361331692000CD897A /* ballMotionState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37A772341331692000CD897A /* ballMotionState.cpp */; };
+		37D0060B133A64D800C650F2 /* ofxOBJModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37D00609133A64D800C650F2 /* ofxOBJModel.cpp */; };
 		92D8EF47130CB14500670435 /* scanDataPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92D8EF04130CB14500670435 /* scanDataPlayer.cpp */; };
 		92D8EF48130CB14500670435 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92D8EF06130CB14500670435 /* main.cpp */; };
 		92D8EF49130CB14500670435 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92D8EF07130CB14500670435 /* testApp.cpp */; };
@@ -951,6 +952,8 @@
 		37A770A91331685700CD897A /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		37A772341331692000CD897A /* ballMotionState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ballMotionState.cpp; sourceTree = "<group>"; };
 		37A772351331692000CD897A /* ballMotionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ballMotionState.h; sourceTree = "<group>"; };
+		37D00609133A64D800C650F2 /* ofxOBJModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOBJModel.cpp; sourceTree = "<group>"; };
+		37D0060A133A64D800C650F2 /* ofxOBJModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOBJModel.h; sourceTree = "<group>"; };
 		92D8EF04130CB14500670435 /* scanDataPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scanDataPlayer.cpp; sourceTree = "<group>"; };
 		92D8EF05130CB14500670435 /* scanDataPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scanDataPlayer.h; sourceTree = "<group>"; };
 		92D8EF06130CB14500670435 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -2754,6 +2757,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				37D00609133A64D800C650F2 /* ofxOBJModel.cpp */,
+				37D0060A133A64D800C650F2 /* ofxOBJModel.h */,
 				92D8EF03130CB14500670435 /* input */,
 				92D8EF09130CB14500670435 /* utils */,
 				92D8EF06130CB14500670435 /* main.cpp */,
@@ -3110,6 +3115,7 @@
 				37A772291331685800CD897A /* Makefile in Sources */,
 				37A772361331692000CD897A /* ballMotionState.cpp in Sources */,
 				3745FE5913341FD400B96A60 /* ofxQTVideoSaver.cpp in Sources */,
+				37D0060B133A64D800C650F2 /* ofxOBJModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

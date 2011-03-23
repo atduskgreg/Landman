@@ -7,6 +7,9 @@
 #include "btBulletDynamicsCommon.h"
 #include "btHeightfieldTerrainShape.h"
 #include "ballMotionState.cpp"
+#include "btGhostObject.h"
+#include "ofxOBJModel.h"
+#include "ofxVec3f.h"
 
 #include "ofxQTVideoSaver.h"
 
@@ -60,6 +63,9 @@ class testApp : public ofBaseApp {
   btCollisionShape* groundShape;
   btRigidBody* groundRigidBody;
   btDefaultMotionState* groundMotionState;
+  
+  ofxOBJModel model;
+
   
   
   // VIDEO
