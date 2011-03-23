@@ -66,6 +66,9 @@ class testApp : public ofBaseApp {
   
   ofxOBJModel model;
 
+  ofImage skyImage;
+  ofTexture skyTexture;
+  ofTextureData skyTextureData;
   
   
   // VIDEO

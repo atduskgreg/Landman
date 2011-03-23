@@ -138,6 +138,13 @@ void testApp::setup() {
   heightfieldShape = new btHeightfieldTerrainShape(640, 480, input.depthImage.getPixels(), 0.4, 0, 255, 1, PHY_UCHAR, false);
 
   localCreateRigidBody(heightfieldShape);
+  ofDisableArbTex();
+  
+  skyImage.loadImage("bourke_starfield.png");
+  //skyTexture = skyImage.getTextureReference();
+  //skyTextureData = skyTexture.getTextureData();
+  gluQuadricTexture(quadratic, GL_TRUE);      // Create Texture Coords 
+  gluQuadricNormals(quadratic, GLU_SMOOTH);
 }
 
 
@@ -175,6 +182,9 @@ void testApp::draw() {
 		
 			// center everything
 			ofTranslate(ofGetWidth()/2, ofGetWidth()/2, -1000);
+    
+           
+    
 			ofSetColor(255, 255, 255);
     
       ofRotateX(panel.getValueF("rotateX"));      
@@ -240,6 +250,22 @@ void testApp::draw() {
       
       ofRotateZ(panel.getValueF("bulletRotateZ"));
       
+      //ofSetColor(0, 255, 0);
+
+      ofPushMatrix();
+    
+        ofRotateX(90); // try to hide starfield joint
+    
+        skyImage.getTextureReference().bind();
+        gluQuadricOrientation(quadratic,GLU_INSIDE);   
+        //ofBox(-640,-480, -100, 740);
+        //glCube(GL_POLYGON, 640);
+      gluSphere(quadratic, 1000, 20, 20); 
+
+
+        skyImage.getTextureReference().unbind();
+      ofPopMatrix();
+    
       ofSetColor(255, 0, 0);
       ofNoFill();
       
